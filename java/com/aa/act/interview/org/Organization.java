@@ -20,7 +20,28 @@ public abstract class Organization {
 	 * @return the newly filled position or empty if no position has that title
 	 */
 	public Optional<Position> hire(Name person, String title) {
-		//your code here
+		return findPosition(root, title)
+				.map(position -> {
+					if (position.isFilled()) {
+						return Optional.<Position>empty();
+					}
+					Employee employee = new Employee(root.nextId(), person);
+					position.setEmployee(Optional.of(employee));
+					return Optional.of(position);
+				})
+				.orElse(Optional.empty());
+	}
+
+	private Optional<Position> findPosition(Position position, String title) {
+		if (position.getTitle().equals(title)) {
+			return Optional.of(position);
+		}
+		for (Position directReport : position.getDirectReports()) {
+			Optional<Position> result = findPosition(directReport, title);
+			if (result.isPresent()) {
+				return result;
+			}
+		}
 		return Optional.empty();
 	}
 

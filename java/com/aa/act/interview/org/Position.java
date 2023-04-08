@@ -11,7 +11,8 @@ public class Position {
 	private String title;
 	private Optional<Employee> employee;
 	private Set<Position> directReports;
-	
+
+	private int nextId = 1;
 	public Position(String title) {
 		this.title = title;
 		employee = Optional.empty();
@@ -57,5 +58,9 @@ public class Position {
 	@Override
 	public String toString() {
 		return title + employee.map(e -> ": " + e.toString()).orElse("");
+	}
+
+	public int nextId() {
+		return nextId++;
 	}
 }
